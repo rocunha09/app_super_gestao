@@ -13,32 +13,10 @@ Route::prefix('/app')->group(function(){
     Route::get('/produtos', function(){return 'produtos';})->name('app.produtos');
 });    
 
-//redirecionamento de rotas
-//1 usar metdo redirect;
-//2 realizar redirecionamento dentro das funções de callbacks;
-//3 realizar redirecionamento dentro dos controllers;
+//rota de fallback
+//utilizada quando o usuário tenta acessar uma rota que não existe.
 
-//redirect
-/*
-Route::get('/rota1', function(){
-    echo 'rota 1';
-})->name('site.rota1');
-
-//comentar estar rota para testar o redirect
-//Route::get('/rota2', function(){
-//    echo 'rota 2';
-//})->name('site.rota2');
-
-
-Route::redirect('/rota2', 'rota1');
-*/
-
-//redirecionamento dentro das funções de callbacks ou redirecionamento através dos controllers
-
-Route::get('/rota1', function(){
-    echo 'rota 1';
-})->name('site.rota1');
-
-Route::get('/rota2', function(){
-   return redirect()->route('site.rota1'); //usa-se o name como parâmetro.
-})->name('site.rota2');
+Route::fallback(function(){
+    echo 'A rota acessada não existe...<br>';
+    echo '<a href="'.route('site.index').'">clique aqui</a> para ir para a página principal'; //neste ponto pode e será implementada uma view mais amigável para o usuário final.
+});
