@@ -2,25 +2,43 @@
 
 use Illuminate\Support\Facades\Route;
 
-//rotas com acesso público
 Route::get('/', 'PrincipalController@principal')->name('site.index');
 Route::get('/sobre-nos', 'SobreNosController@sobreNos')->name('site.sobrenos');
 Route::get('/contato', 'ContatoController@contato')->name('site.contato');
 Route::get('/login', function(){return 'login';})->name('site.login');
 
-//rotas agrupadas dentro de um prefixo para acesso privado.
 Route::prefix('/app')->group(function(){
     Route::get('/clientes', function(){return 'clientes';})->name('app.clientes');
     Route::get('/fornecedores', function(){return 'fornecedores';})->name('app.fornecedores');
     Route::get('/produtos', function(){return 'produtos';})->name('app.produtos');
 });    
 
-//as rotas nomeadas facilitam o uso do helper disponibilizado pelo framework na lógica da apliçaão, como um "apelido".
-//desta forma nosso menu de navegação pode ficar assim:
+//redirecionamento de rotas
+//1 usar metdo redirect;
+//2 realizar redirecionamento dentro das funções de callbacks;
+//3 realizar redirecionamento dentro dos controllers;
 
-//antes:
-//<a href="/">Principal</a>
-//depois
-//<a href="{{route('site.index')}}">Principal</a>
+//redirect
+/*
+Route::get('/rota1', function(){
+    echo 'rota 1';
+})->name('site.rota1');
 
-//o grande benefício é que se a "assinatura" da rota mudar, não temos uma dependência direta gerando alteração em várias partes do código, mas apenas em um ponto.
+//comentar estar rota para testar o redirect
+//Route::get('/rota2', function(){
+//    echo 'rota 2';
+//})->name('site.rota2');
+
+
+Route::redirect('/rota2', 'rota1');
+*/
+
+//redirecionamento dentro das funções de callbacks ou redirecionamento através dos controllers
+
+Route::get('/rota1', function(){
+    echo 'rota 1';
+})->name('site.rota1');
+
+Route::get('/rota2', function(){
+   return redirect()->route('site.rota1'); //usa-se o name como parâmetro.
+})->name('site.rota2');
